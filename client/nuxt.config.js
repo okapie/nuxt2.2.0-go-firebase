@@ -52,7 +52,7 @@ module.exports = {
   /*
   ** Build configuration
   */
-  buildDir: '../functions/nuxt',
+  buildDir: process.env.DEV ? '.nuxt' : '../functions/nuxt',
   build: {
     /*
     ** You can extend webpack config here

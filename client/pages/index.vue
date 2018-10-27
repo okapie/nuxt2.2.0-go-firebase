@@ -1,50 +1,43 @@
 <template>
   <section class="container">
     <div>
-      <logo/>
+      <app-logo/>
       <h1 class="title">
-        client
+        nuxt2.2.0-vue
       </h1>
       <h2 class="subtitle">
         Nuxt.js project
       </h2>
       <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
+        <nuxt-link 
+          to="/users/" 
+          class="button--green">Users</nuxt-link>
+        <nuxt-link 
+          to="/samples/" 
+          class="button--green">Samples</nuxt-link>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import AppLogo from "~/components/AppLogo.vue"
 
 export default {
   components: {
-    Logo
+    AppLogo
   }
 }
 </script>
 
 <style>
-
 .container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 20px;
   text-align: center;
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
   font-size: 100px;
@@ -64,3 +57,4 @@ export default {
   padding-top: 15px;
 }
 </style>
+
