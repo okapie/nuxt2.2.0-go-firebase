@@ -1,0 +1,16 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions",
+  "author": "okapie",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "6.0.0",
+    "firebase-functions": "2.1.0",
+    "nuxt": "2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "4.19.1",
+    "eslint-plugin-promise": "3.8.0"
+  }
+}
