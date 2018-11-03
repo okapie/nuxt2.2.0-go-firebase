@@ -33,6 +33,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/vue-lazyload', ssr: false }
   ],
 
   /*
@@ -68,5 +69,16 @@ module.exports = {
       //   })
       // }
     }
-  }
+  },
+  rule: [
+    {
+      test: /\.(png|jpg|gif|svg)$/,
+      use: [{
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]?[hash:5]'
+        }
+      }]
+    },
+  ]
 }

@@ -9,12 +9,21 @@ import (
     "github.com/gorilla/handlers"
 )
 
-func public(w http.ResponseWriter, r *http.Request) {
-    json.NewEncoder(w).Encode(map[string]string{"message": "hello public!"})
+type Card struct {
+    Id               string    `json:"id"`
+    Name             string    `json:"name"`
+    UploadedImage    string    `json:"uploadedImage"`
 }
 
-func private(w http.ResponseWriter, r *http.Request) {
-    json.NewEncoder(w).Encode(map[string]string{"message": "hello private!"})
+type Cards []Card
+
+func getCardList(w http.ResponseWriter, r *http.Request) {
+    cards := Cards{
+        Card{Id: "1", Name: "TEST001", UploadedImage: "TEST001.png"},
+        Card{Id: "2", Name: "TEST002", UploadedImage: "TEST002.png"},
+    }
+
+    json.NewEncoder(w).Encode(cards)
 }
 
 func main() {
@@ -23,8 +32,7 @@ func main() {
     allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
 
     r := mux.NewRouter()
-    r.HandleFunc("/public", public).Methods("GET")
-    r.HandleFunc("/private", private).Methods("GET")
+    r.HandleFunc("/api/v1/cards", getCardList).Methods("GET")
 
     log.Fatal(http.ListenAndServe(":8000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }
