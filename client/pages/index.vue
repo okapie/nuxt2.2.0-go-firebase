@@ -12,6 +12,9 @@
         <nuxt-link 
           to="/users/" 
           class="button--green">Users</nuxt-link>
+        <nuxt-link
+          to="/sample-tree/"
+          class="button--green">Tree</nuxt-link>
         <nuxt-link 
           to="/sample-request/"
           class="button--green">Http Request</nuxt-link>
