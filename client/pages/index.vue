@@ -13,8 +13,11 @@
           to="/users/" 
           class="button--green">Users</nuxt-link>
         <nuxt-link 
-          to="/samples/" 
-          class="button--green">Samples</nuxt-link>
+          to="/sample-request/"
+          class="button--green">Http Request</nuxt-link>
+        <nuxt-link
+          to="/sample-store/"
+          class="button--green">Vuex Store</nuxt-link>
       </div>
     </div>
   </section>
