@@ -33,7 +33,6 @@
   dt.term-body,
   dd.description-body {
     min-height: 60px;
-    display: flex;
     text-align: center;
     background: #fff;
     box-sizing: border-box;
@@ -83,5 +82,8 @@
   p {
     color: #ff4500;
     font-size: 12px;
+  }
+  .delete-button {
+    margin: 8px 0 0 8px;
   }
 }

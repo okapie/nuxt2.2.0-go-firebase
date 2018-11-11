@@ -24,6 +24,8 @@
     <script>
       (() => {
       window.parent = document.getElementById("parent")
+      window.parentNode = window.parent.parentNode
+      window.deleteElement = target => {window.parent.parentNode.removeChild(document.getElementById(target))}
       })();
     </script>
   </div>
@@ -36,18 +38,31 @@
     components: {
       CloneItem
     },
+    data () {
+      return {
+        counter: 0
+      }
+    },
     methods: {
+      deleteElement(e) {
+        console.log(e.currentTarget.value)
+      },
       addElement() {
         if (process.browser) {
-          // FIXME: Can not insert component with innerHTML.
-          // window.parent.innerHTML += "<CloneItem />";
-          window.parent.innerHTML +=
-            "<div class=\"clone-item\">\n" +
+          let helper = document.createElement("div")
+          const counter = this.counter++
+          helper.innerHTML +=
+            "<div id=\"clonedForm_" + counter + "\" class=\"clone-item\">\n" +
             "  <div class=\"main\">\n" +
             "    <label>TEST</label>\n" +
-            "    <input type=\"text\" placeholder=\"Name\" />\n" +
+            "    <input type=\"text\" placeholder=\"Name\" value=\"" + counter + "\" />\n" +
+            "    <input class=\"delete-button\" type='button' value='delete' onClick='window.deleteElement(\"clonedForm_" + counter + "\")' />" +
             "  </div>\n" +
             "</div>";
+
+          while (helper.firstChild) {
+            window.parentNode.insertBefore(helper.firstChild, window.parent)
+          }
         }
       }
     },
