@@ -7,7 +7,9 @@ const createStore = () => {
   return new Vuex.Store({
     state: () => ({
       counter: 0,
+      formCounter: 0,
       show: false,
+      inputs: []
     }),
     mutations: {
       increment (state) {
@@ -16,6 +18,9 @@ const createStore = () => {
       display (state) {
         state.show = !state.show
         console.log(state.show)
+      },
+      onSaveInputsValue (state, value) {
+        state.inputs = value
       }
     }
   })

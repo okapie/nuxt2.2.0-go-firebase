@@ -7,27 +7,32 @@
       <dl class="list-wrapper">
         <dt class="term-header">Item</dt>
         <dd class="description-header">Content</dd>
-        <dt class="term-body">Single component view</dt>
-        <dd class="description-body">
-          <CloneItem />
-        </dd>
-        <dt class="term-body">DOM tree: innerHTML</dt>
+        <dt class="term-body">DOM tree</dt>
         <dd class="description-body">
           <div>
             <button @click="addElement">Add</button>
           </div>
-          <div id="parent"></div>
+          <div>
+            <div v-if="$store.state.inputs.length > 0">
+              <ul v-for="input in $store.state.inputs" :key="input.index">
+                <li>
+                  <label>TEST</label>
+                  <input
+                    :name="'additional_' + input.index"
+                    :value="input.value"
+                    placeholder="Name"
+                    type="text"
+                    @change="changeValue"
+                  />
+                  <input class="delete-button" type="button" value="delete" @click="deleteElement(input.index)" />
+                </li>
+              </ul>
+            </div>
+          </div>
         </dd>
       </dl>
       <nuxt-link to="/">Top page</nuxt-link>
     </section>
-    <script>
-      (() => {
-      window.parent = document.getElementById("parent")
-      window.parentNode = window.parent.parentNode
-      window.deleteElement = target => {window.parent.parentNode.removeChild(document.getElementById(target))}
-      })();
-    </script>
   </div>
 </template>
 
@@ -40,30 +45,34 @@
     },
     data () {
       return {
-        counter: 0
+        counter: 0,
+        inputs: this.$store.state.inputs || []
       }
     },
     methods: {
-      deleteElement(e) {
-        console.log(e.currentTarget.value)
-      },
       addElement() {
-        if (process.browser) {
-          let helper = document.createElement("div")
-          const counter = this.counter++
-          helper.innerHTML +=
-            "<div id=\"clonedForm_" + counter + "\" class=\"clone-item\">\n" +
-            "  <div class=\"main\">\n" +
-            "    <label>TEST</label>\n" +
-            "    <input type=\"text\" placeholder=\"Name\" value=\"" + counter + "\" />\n" +
-            "    <input class=\"delete-button\" type='button' value='delete' onClick='window.deleteElement(\"clonedForm_" + counter + "\")' />" +
-            "  </div>\n" +
-            "</div>";
-
-          while (helper.firstChild) {
-            window.parentNode.insertBefore(helper.firstChild, window.parent)
-          }
-        }
+        let counter = this.counter++
+        this.inputs.push({
+          index: this.inputs.length > 0 ? counter : 0,
+          id: this.inputs.length > 0 ? counter : 0,
+          value: "",
+        })
+        this.$store.commit("onSaveInputsValue", this.inputs)
+        this._watcher.update()
+      },
+      changeValue(e) {
+        const index = +e.target.name.split("_")[1]
+        this.inputs[index].value = e.currentTarget.value
+        this.$store.commit("onSaveInputsValue", this.inputs)
+        this._watcher.update()
+      },
+      deleteElement(index) {
+        this.inputs = this.inputs.filter(x => x.index !== index)
+        Object.entries(this.inputs).map(([key, value], elementIndex) => {
+          value.index = elementIndex
+        })
+        this.$store.commit("onSaveInputsValue", this.inputs)
+        this._watcher.update()
       }
     },
   }
