@@ -4,6 +4,9 @@ import (
     "encoding/json"
     "log"
     "net/http"
+    "net/url"
+    "fmt"
+    "io/ioutil"
 
     "github.com/gorilla/mux"
     "github.com/gorilla/handlers"
@@ -26,6 +29,22 @@ func getCardList(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(cards)
 }
 
+func postCard(w http.ResponseWriter, r *http.Request) {
+    defer r.Body.Close()
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("[request body row] " + string(body))
+    decoded, error := url.QueryUnescape(string(body))
+    if error != nil {
+        log.Fatal(error)
+    }
+    fmt.Println("[request body decoded] ", decoded)
+    fmt.Fprint(w, "Received Post Request.")
+}
+
 func main() {
     allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:3000"})
     allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
@@ -33,6 +52,7 @@ func main() {
 
     r := mux.NewRouter()
     r.HandleFunc("/api/v1/cards", getCardList).Methods("GET")
+    r.HandleFunc("/api/v1/registration", postCard).Methods("POST")
 
     log.Fatal(http.ListenAndServe(":8000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }
