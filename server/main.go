@@ -4,7 +4,6 @@ import (
     "encoding/json"
     "log"
     "net/http"
-    "net/url"
     "fmt"
     "io/ioutil"
 
@@ -37,11 +36,12 @@ func postCard(w http.ResponseWriter, r *http.Request) {
     }
 
     fmt.Println("[request body row] " + string(body))
-    decoded, error := url.QueryUnescape(string(body))
-    if error != nil {
-        log.Fatal(error)
+
+    var card Card
+    if err := json.Unmarshal(body, &card); err != nil {
+        log.Fatal(err)
     }
-    fmt.Println("[request body decoded] ", decoded)
+
     fmt.Fprint(w, "Received Post Request.")
 }
 
