@@ -6,9 +6,12 @@ import (
     "net/http"
     "fmt"
     "io/ioutil"
+    "database/sql"
 
     "github.com/gorilla/mux"
     "github.com/gorilla/handlers"
+    /* 'imported and not used' error occurred if without _. */
+    _ "github.com/go-sql-driver/mysql"
 )
 
 type Card struct {
@@ -20,12 +23,33 @@ type Card struct {
 type Cards []Card
 
 func getCardList(w http.ResponseWriter, r *http.Request) {
-    cards := Cards{
-        Card{Id: "1", Name: "TEST001", UploadedImage: "TEST001.png"},
-        Card{Id: "2", Name: "TEST002", UploadedImage: "TEST002.png"},
+    db, err := sql.Open("mysql", "root:password@/sample")
+    if err != nil {
+        panic(err.Error())
     }
 
-    json.NewEncoder(w).Encode(cards)
+    defer db.Close()
+
+    rows, err := db.Query("select id, name, uploadedImage from cards")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    var cards []Card
+
+    for rows.Next() {
+        var id string
+        var name string
+        var uploadedImage string
+
+        rows.Scan(&id ,&name, &uploadedImage)
+        cards = append(cards, Card{id, name, uploadedImage })
+    }
+
+    cardsBytes, _ := json.Marshal(&cards)
+
+    w.Write(cardsBytes)
+    db.Close()
 }
 
 func postCard(w http.ResponseWriter, r *http.Request) {
